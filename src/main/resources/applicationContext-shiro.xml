@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <description>apache shiro配置</description>
+
+
+   <bean id="myRealm" class="com.hcj.spring.web.security.SecurityRealm"></bean>
+
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--具体配置权限的bean-->
+        <property name="realms">
+            <list>
+                <!--引入class-->
+                <ref bean="myRealm"/>
+               <!-- 注解的方式写-->
+                <!--<ref bean="SecurityRealm"/>-->
+            </list>
+        </property>
+        <!--为了减小数据库压力，添加了缓存机制-->
+        <!--cacheManager,集合spring缓存工厂 -->
+        <property name="cacheManager" ref="shiroEhcacheManager" />
+        <property name="sessionManager" ref="sessionManager" />
+    </bean>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/page/login"/>
+        <property name="successUrl" value="/admin/getIndexPage"/>
+        <property name="unauthorizedUrl" value="/page/401"/>
+        <property name="filterChainDefinitions">
+            <value>
+                <!-- 静态资源允许访问 -->
+                <!--/maven/app/** = anon-->
+                <!--/maven/assets/** = anon-->
+                /app/**=anon
+                /assets/**=anon
+                <!--perms[user:create]表示访问此链接需要user:create权限-->
+                /admin =perms[user:create]
+                <!--角色是admin，允许访问-->
+                /admin/login =anon
+                /admin/test = roles[user]
+                /admin/** = roles[admin]
+                <!--/page/** = anon-->
+                <!-- 登录页允许访问 -->
+                <!--/rest/admin/** = anon-->
+                <!--/rest/admin/login = anon-->
+                <!-- 其他资源需要认证 -->
+                <!--/** = authc-->
+
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+    <!-- 缓存管理器 使用Ehcache实现 -->
+    <bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache-shiro.xml"/>
+    </bean>
+
+    <!-- 会话DAO -->
+    <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.MemorySessionDAO"/>
+
+    <!-- 会话管理器 -->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="sessionDAO"/>
+    </bean>
+
+
+    <!-- Shiro生命周期处理器 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+</beans>

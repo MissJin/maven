@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hcj.spring.web.dao.AdminMapper" >
+  <resultMap id="BaseResultMap" type="com.hcj.spring.web.bean.Admin" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="roleId" property="roleid" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="sell_rate" property="sellRate" jdbcType="DECIMAL" />
+    <result column="admin_type" property="adminType" jdbcType="INTEGER" />
+    <result column="all_child_number" property="allChildNumber" jdbcType="INTEGER" />
+    <result column="direct_child_number" property="directChildNumber" jdbcType="INTEGER" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="parent_admin_id" property="parentAdminId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="child_sell_rate" property="childSellRate" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, password, roleId, user_name, code, sell_rate, admin_type, all_child_number, 
+    direct_child_number, mobile, parent_admin_id, status, child_sell_rate
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hcj.spring.web.bean.AdminExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from admin
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from admin
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from admin
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hcj.spring.web.bean.AdminExample" >
+    delete from admin
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hcj.spring.web.bean.Admin" >
+    insert into admin (id, name, password, 
+      roleId, user_name, code, 
+      sell_rate, admin_type, all_child_number, 
+      direct_child_number, mobile, parent_admin_id, 
+      status, child_sell_rate)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{roleid,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{sellRate,jdbcType=DECIMAL}, #{adminType,jdbcType=INTEGER}, #{allChildNumber,jdbcType=INTEGER}, 
+      #{directChildNumber,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{parentAdminId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{childSellRate,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hcj.spring.web.bean.Admin" >
+    insert into admin
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="roleid != null" >
+        roleId,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="sellRate != null" >
+        sell_rate,
+      </if>
+      <if test="adminType != null" >
+        admin_type,
+      </if>
+      <if test="allChildNumber != null" >
+        all_child_number,
+      </if>
+      <if test="directChildNumber != null" >
+        direct_child_number,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="parentAdminId != null" >
+        parent_admin_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="childSellRate != null" >
+        child_sell_rate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="sellRate != null" >
+        #{sellRate,jdbcType=DECIMAL},
+      </if>
+      <if test="adminType != null" >
+        #{adminType,jdbcType=INTEGER},
+      </if>
+      <if test="allChildNumber != null" >
+        #{allChildNumber,jdbcType=INTEGER},
+      </if>
+      <if test="directChildNumber != null" >
+        #{directChildNumber,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAdminId != null" >
+        #{parentAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="childSellRate != null" >
+        #{childSellRate,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hcj.spring.web.bean.AdminExample" resultType="java.lang.Integer" >
+    select count(*) from admin
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update admin
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleid != null" >
+        roleId = #{record.roleid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userName != null" >
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null" >
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sellRate != null" >
+        sell_rate = #{record.sellRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adminType != null" >
+        admin_type = #{record.adminType,jdbcType=INTEGER},
+      </if>
+      <if test="record.allChildNumber != null" >
+        all_child_number = #{record.allChildNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.directChildNumber != null" >
+        direct_child_number = #{record.directChildNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.mobile != null" >
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentAdminId != null" >
+        parent_admin_id = #{record.parentAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.childSellRate != null" >
+        child_sell_rate = #{record.childSellRate,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update admin
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      roleId = #{record.roleid,jdbcType=INTEGER},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
+      sell_rate = #{record.sellRate,jdbcType=DECIMAL},
+      admin_type = #{record.adminType,jdbcType=INTEGER},
+      all_child_number = #{record.allChildNumber,jdbcType=INTEGER},
+      direct_child_number = #{record.directChildNumber,jdbcType=INTEGER},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      parent_admin_id = #{record.parentAdminId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER},
+      child_sell_rate = #{record.childSellRate,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hcj.spring.web.bean.Admin" >
+    update admin
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null" >
+        roleId = #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="sellRate != null" >
+        sell_rate = #{sellRate,jdbcType=DECIMAL},
+      </if>
+      <if test="adminType != null" >
+        admin_type = #{adminType,jdbcType=INTEGER},
+      </if>
+      <if test="allChildNumber != null" >
+        all_child_number = #{allChildNumber,jdbcType=INTEGER},
+      </if>
+      <if test="directChildNumber != null" >
+        direct_child_number = #{directChildNumber,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAdminId != null" >
+        parent_admin_id = #{parentAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="childSellRate != null" >
+        child_sell_rate = #{childSellRate,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.hcj.spring.web.bean.Admin" >
+    update admin
+    set name = #{name,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      roleId = #{roleid,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      sell_rate = #{sellRate,jdbcType=DECIMAL},
+      admin_type = #{adminType,jdbcType=INTEGER},
+      all_child_number = #{allChildNumber,jdbcType=INTEGER},
+      direct_child_number = #{directChildNumber,jdbcType=INTEGER},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      parent_admin_id = #{parentAdminId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      child_sell_rate = #{childSellRate,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ <!-- 用户的权限验证-->
+<!--  <select id="authentication" resultMap="BaseResultMap" parameterMap="map">
+    select
+    <include refid="Base_Column_List"/>
+    from admin
+    where user_name =#{record.userName,jdbcType=VARCHAR} and password =#{record.password,jdbcType=CHAR}
+  </select>-->
+  <select id="authentication" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from admin
+    where user_name = #{record.userName,jdbcType=VARCHAR} and password = #{record.password,jdbcType=CHAR}
+  </select>
+
+  <!--分页查询-->
+  <select id="selectByExampleAndPage" resultMap="BaseResultMap" parameterType="com.hcj.spring.web.bean.AdminExample">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from admin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

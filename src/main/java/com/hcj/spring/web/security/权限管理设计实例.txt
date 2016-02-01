@@ -1,0 +1,40 @@
+说明：user_role 和 role 做连表  select role.* from role left join user_role on role.id=user_role.role_id where user_role.user_id=?  的结果 result_role  ,把role
+      role_permission 和 permission 做连表 select permission.* from permission left join  role_permission on permission.id=role_permission.permission_id where role_permission.role_id=? 的结果result_permission
+
+
+
+
+use maven;
+CREATE TABLE `admin_role` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表id',
+  `admin_id` bigint(20) unsigned DEFAULT NULL COMMENT '用户id',
+  `role_id` bigint(20) unsigned DEFAULT NULL COMMENT '角色id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='用户与角色关联表';
+
+
+CREATE TABLE `role` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色id',
+  `role_name` varchar(32) DEFAULT NULL COMMENT '角色名',
+  `role_sign` varchar(128) DEFAULT NULL COMMENT '角色标识,程序中判断使用,如"admin"',
+  `description` varchar(256) DEFAULT NULL COMMENT '角色描述,UI界面显示使用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='角色表';
+
+
+
+CREATE TABLE `role_permission` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '表id',
+  `role_id` bigint(20) unsigned DEFAULT NULL COMMENT '角色id',
+  `permission_id` bigint(20) unsigned DEFAULT NULL COMMENT '权限id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='角色与权限关联表';
+
+CREATE TABLE `permission` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '权限id',
+  `permission_name` varchar(32) DEFAULT NULL COMMENT '权限名',
+  `permission_sign` varchar(128) DEFAULT NULL COMMENT '权限标识,程序中判断使用,如"user:create"',
+  `description` varchar(256) DEFAULT NULL COMMENT '权限描述,UI界面显示使用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='权限表';
+

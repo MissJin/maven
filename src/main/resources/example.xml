@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd">
+
+       <context:component-scan base-package="com.hcj.spring"/>
+
+       <mvc:annotation-driven/>
+
+       <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+              <property name="prefix" value="WEB-INF/views"/>
+              <property name="suffix" value=".jsp"/>
+       </bean>
+       <!--springMvc 文件上传异常处理-->
+       <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+              <property name="exceptionMappings">
+                     <props>
+                            <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">WEB-INF/error_fileupload</prop>
+                            <prop key="java.lang.Throwable">WEB-INF/500</prop>
+                     </props>
+              </property>
+       </bean>
+
+       <!-- ======================shiro的配置=====================start====================-->
+       <!-- 默认可以访问welcome-list-page-->
+       <mvc:default-servlet-handler/>
+       <!--静态资源-->
+       <mvc:resources mapping="/app/**" location="/app/**"/>
+       <mvc:resources mapping="/assets/**" location="/assets/**"/>
+
+
+       <!--自定义权限bean ShiroDbRealm.java-->
+       <bean id="myRealm" class="com.hcj.spring.web.bean.role"></bean>
+       <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+              <property name="realm" ref="myRealm"/>
+       </bean>
+       <!--定义过滤器-->
+       <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+              <property name="securityManager" ref="securityManager"/>
+              <property name="loginUrl" value="/login"/>
+              <property name="successUrl" value="/admin"/>
+              <property name="unauthorizedUrl" value="/page/501"/>
+              <property name="filterChainDefinitions">
+                     <value>
+                            /maven/admin=anon
+                            /maven/page=anon
+                            /maven/investlist=authc
+                            /maven/**=anon
+                     </value>
+              </property>
+
+       </bean>
+       <bean id="lifeCycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+       <!--实现带注解的shiro 比如：@RequiresRoles,@RequiresPermissions-->
+       <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifeCycleBeanPostProcessor"/>
+       <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+              <property name="securityManager" ref="securityManager"/>
+       </bean>
+       <!-- ======================shiro的配置==================End======================-->
+</beans>
